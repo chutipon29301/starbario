@@ -1,5 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
+const { WebhookClient } = require('dialogflow-fulfillment');
 
 const app = express();
 
@@ -7,39 +8,30 @@ const app = express();
 app.use(helmet());
 
 app.get('*', (req, res) => {
+	const agent = new WebhookClient({ request, response });
+	// tslint:disable:no-console
+	console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
+	console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
-    const param = {
-        kind: '',
-        size: '',
-        caffeine: '',
-        syrup: '',
-        sweet: '',
-        milkType: '',
-        extra: '',
-        menu: '',
-        addOns: [{ number: '', syrup: '' , extra: ''}],
-    }
-    let menuName = `${param.kind} ${param.size} ${param.caffeine}`;
-    menuName.trim();
-    param.addOns.map((arr) => {
-        if(arr.syrup){
-            menuName += ` ${arr.syrup}`;
-        }
-        if(arr.number){
-            menuName +=  `${arr.number} shots`;
-        }
-    })
-    menuName += ` ${milkType}`;
-    param.addOns.map((arr) => {
-        if(arr.extra){
-            menuName += ` ${arr.extra}`;
-        }
-        if(arr.number){
-            menuName +=  ` ${arr.number} shots `;
-        }
-    })
-    menuName += ` ${extra} ${menu}`;
-    menuName.trim();
+	function welcome(agent) {
+		agent.add(`Welcome to my agent!`);
+	}
+
+	function fallback(agent) {
+		agent.add(`I didn't understand`);
+		agent.add(`I'm sorry, can you try again?`);
+	}
+
+	const intentMap = new Map();
+	intentMap.set('Default Welcome Intent', welcome);
+	intentMap.set('Default Fallback Intent', fallback);
+	// intentMap.set('your intent name here', yourFunctionHandler);
+	// intentMap.set('your intent name here', googleAssistantHandler);
+	agent.handleRequest(intentMap);
+
+	// res.json({
+	//     text: req.query.text,
+	// });
 });
 
 module.exports = app;
