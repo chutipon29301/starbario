@@ -1,1 +1,10 @@
-{"version":2,"name":"starbario","builds":[{"src":"**/*.js","use":"@now/node"}]}
+{
+    "version": 2,
+    "name": "starbario",
+    "builds": [
+        {
+            "src": "**/*.js",
+            "use": "@now/node"
+        }
+    ]
+}
