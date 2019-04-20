@@ -1,0 +1,1 @@
+{"version":2,"name":"starbario","builds":[{"src":"**/*.js","use":"@now/node"}]}
