@@ -85,6 +85,55 @@ app.post('*', (request, response) => {
 
 	function spellStarbucks(agent) {
 		agent.add('กำลังดำเนินการ กรุณารอสักครู่ค่ะ');
+
+		const param = request.body.queryResult.parameters;
+		param.addOns = param['add-ons'];
+		param.milkType = param['milk-type'];
+		console.log(param);
+
+		let menuName = `${param.kind} ${param.size} ${param.sweet} ${param.caffeine}`;
+		menuName.trim();
+		if (!(param.addOns instanceof Array)) {
+			param.addOns = [param.addOns];
+		}
+		param.addOns.map(arr => {
+			if (arr.syrup) {
+				menuName += ` ${arr.syrup}`;
+				if (arr.number) {
+					menuName += `${arr.number} shots`;
+				}
+			}
+		});
+		menuName += ` ${param.milkType}`;
+		param.addOns.map(arr => {
+			if (arr.extra) {
+				menuName += ` ${arr.extra}`;
+				if (arr.number) {
+					menuName += ` ${arr.number} shots `;
+				}
+			}
+		});
+		menuName += ` ${param.menu}`;
+		menuName.trim();
+		const originalContentUrl = encodeURI(
+			`https://starbario.chutipon.now.sh/read?text=${menuName}`
+		);
+
+		console.log(menuName);
+		console.log(originalContentUrl);
+
+		agent.add(menuName);
+		agent.add(
+			new Payload(
+				'LINE',
+				{
+					type: 'audio',
+					originalContentUrl,
+					duration: 3000
+				},
+				{ sendAsMessage: true }
+			)
+		);
 	}
 
 	const intentMap = new Map();
