@@ -224,7 +224,7 @@ app.post('/hook', (request, response) => {
             menuName = `Ask your father to do it for you`
         }
         const originalContentUrl = encodeURI(
-            `https://starbario.chutipon.now.sh/read?text=${menuName}`
+            `https://starbario.herokuapp.com/read?text=${menuName}`
         );
 
         console.log(menuName);
@@ -247,7 +247,7 @@ app.post('/hook', (request, response) => {
     function createSimpleAudioHandler(menuName) {
         return function (agent) {
             const originalContentUrl = encodeURI(
-                `https://starbario.chutipon.now.sh/read?text=${menuName}`
+                `https://starbario.herokuapp.com/read?text=${menuName}`
             );
 
             agent.add(menuName);
