@@ -245,9 +245,9 @@ app.post('/hook', (request, response) => {
         }
 
         menuName.trim();
-        if (menuName.length > 60) {
-            menuName = `Ask your father to do it for you`
-        }
+        // if (menuName.length > 60) {
+        //     menuName = `Ask your father to do it for you`
+        // }
         const originalContentUrl = encodeURI(
             `https://starbario.herokuapp.com/read?text=${menuName}`
         );
