@@ -181,6 +181,28 @@ app.post('/hook', (request, response) => {
         );
     }
 
+    function water(agent) {
+        const param = request.body.queryResult.parameters;
+        let menuName = `${param.kind} ${param.size} water`;
+
+        const originalContentUrl = encodeURI(
+            `https://starbario.herokuapp.com/read?text=${menuName}`
+        );
+
+        agent.add(menuName);
+        agent.add(
+            new Payload(
+                'LINE', {
+                    type: 'audio',
+                    originalContentUrl,
+                    duration: 3000
+                }, {
+                    sendAsMessage: true
+                }
+            )
+        );
+    }
+
     function spellStarbucks(agent) {
         agent.add('กำลังดำเนินการ กรุณารอสักครู่ค่ะ');
 
@@ -276,8 +298,8 @@ app.post('/hook', (request, response) => {
     intentMap.set('Menu', menu);
     intentMap.set('Menu - yes', spellStarbucks);
     intentMap.set('Surprise me', surpriseMe);
-    intentMap.set('Water', createSimpleAudioHandler('Water'));
-    intentMap.set('Legendary green tea', createSimpleAudioHandler('Extra green tea frappuccino with java chip extra caramel syrup extra sauce extra coffee jelly extra mocha sauce extra wipped cream extra java chip'));
+    intentMap.set('Water', water);
+    intentMap.set('Legendary green tea', createSimpleAudioHandler('An venti extra green tea frappuccino with java chip extra caramel syrup extra sauce extra coffee jelly extra mocha sauce extra wipped cream extra java chip'));
 
     agent.handleRequest(intentMap);
 
