@@ -75,6 +75,7 @@ app.post('*', (request, response) => {
 						thumbnailImageUrl:
 							'https://i.kym-cdn.com/photos/images/newsfeed/001/256/183/9d5.png',
 						title: 'ยืนยันรายการ',
+						// TODO: change queryText to original text
 						text: queryText
 					}
 				},
