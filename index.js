@@ -40,22 +40,25 @@ app.get('/read', (req, res) => {
     const text = req.query.text;
     const randomSound = process.env.LANGUAGE !== 'en';
     let voice = {};
-    if (randomSound) {
-        voice = {
-            languageCode: 'ja-JP',
-            name: 'ja-JP-Standard-A'
-        };
-    } else {
-        voice = {
-            languageCode: 'en-US',
-            ssmlGender: 'NEUTRAL'
-        };
-    }
+    // if (randomSound) {
+    //     voice = {
+    //         languageCode: 'ja-JP',
+    //         name: 'ja-JP-Standard-A'
+    //     };
+    // } else {
+    //     voice = {
+    //         languageCode: 'en-US',
+    //         ssmlGender: 'NEUTRAL'
+    //     };
+    // }
     const request = {
         input: {
             text
         },
-        voice,
+        voice: {
+            languageCode: 'en-US',
+            ssmlGender: 'NEUTRAL'
+        },
         audioConfig: {
             audioEncoding: 'LINEAR16',
             pitch: 0,
@@ -156,14 +159,14 @@ app.post('/hook', (request, response) => {
             "A venti iced coffee with exactly four ice cubes.",
             "A venti Pike Place coffee with cream, two Sweet 'N Low, two Equals, and two Splenda packets."
         ]
-        const menuName = menuList[Math.floor(Math.random() * menuList.length)]
+        const menuName = menuList[Math.floor(Math.random() * menuList.length)];
 
         const originalContentUrl = encodeURI(
             `https://starbario.herokuapp.com/read?text=${menuName}`
         );
 
         agent.add("เมนูของคุณคือ")
-        agemt.add(menuName)
+        agent.add(menuName)
 
         agent.add(
             new Payload(
