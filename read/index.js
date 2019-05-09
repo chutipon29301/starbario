@@ -16,6 +16,7 @@ const app = express();
 app.use(helmet());
 
 app.get('*', (req, res) => {
+    console.log('request');
     const text = req.query.text;
     const request = {
         input: { text },
@@ -34,6 +35,7 @@ app.get('*', (req, res) => {
             return;
         }
         try {
+            console.log(range);
             if (range) {
                 const parts = range.replace(/bytes=/, "").split("-")
                 const start = parseInt(parts[0], 10);
@@ -43,23 +45,31 @@ app.get('*', (req, res) => {
                     return;
                 }
                 const file = toStream(response.audioContent.slice(start, end));
-                let head = {
+                const head = {
                     'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                     'Accept-Ranges': 'bytes',
                     'Content-Length': end - start,
                     'Content-Type': 'audio/mpeg',
                 }
+                console.log(head);
                 res.writeHead(206, head);
                 file.pipe(res);
             } else {
-                const head = {
+                // const head = {
+                //     'Content-Length': fileSize,
+                //     'Content-Type': 'audio/mpeg',
+                // }
+                // console.log(head);
+                // res.set(head);
+                console.log(fileSize);
+                res.set({
                     'Content-Length': fileSize,
                     'Content-Type': 'audio/mpeg',
-                }
-                res.writeHead(200, head)
-                toStream(response.audioContent).pipe(res);
+                });
+                res.send(response.audioContent);
             }
         } catch (error) {
+            console.log(error);
             res.status(500).send(error);
         }
     });
